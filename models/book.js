@@ -1,15 +1,25 @@
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+
 // Mongoose/MongoDB: Generates new Schema for Articles
 const BookSchema = new Schema({
     title: {
         type: String,
     },
-    view: {
-        type: String,
-        default: 'No link today!'
+    authors: {
+        type: Array,
     },
-    summary: {
+    description: {
         type: String,
-        default: 'No summary this time!'
+        default: 'No description this time!'
+    },
+    image: {
+        type: String,
+        default: 'No image this time!'
+    },
+    link: {
+        type: String,
+        default: 'No link this time!'
     }
 });
 

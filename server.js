@@ -2,7 +2,8 @@
 // =============================================================
 const express = require('express');
 const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
+
+const routes = require("./routes");
 
 require("dotenv").config();
 
@@ -10,10 +11,16 @@ require("dotenv").config();
 // =============================================================
 const app = express();
 
-// Bodyparser: Bodyparser Middleware
+// Middleware
 // =============================================================
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
+// Sets up the Express App - Static Assets
+// =============================================================
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static("client/build"));
+  }
 
 // DB: Config
 // =============================================================
@@ -30,10 +37,9 @@ mongoose
 .then(()=> console.log('MongoDB connected...'))
 .catch(err => console.log(err));
 
-// Server: Requires the api-Routes
+// Server: Requires Routes
 // =============================================================
-app.use('/api', require('./routes/apiRoutes'));
-
+app.use(routes);
 
 // Server: Define Port
 // =============================================================
