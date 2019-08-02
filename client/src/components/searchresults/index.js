@@ -9,7 +9,7 @@ const SearchResults = (props) => {
 
     if(props.hasSearched){
         searches = props.results.map((bookresult) => {
-            <BookResult saveBook={props.saveBook} bookResult={bookresult} />
+            return <BookResult saveBook={props.saveBook} bookResult={bookresult} />
         })
     }
 
