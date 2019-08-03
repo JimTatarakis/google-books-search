@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 // Utilities: Import Utilities for API calls
 import API from '../../utilities/api'
 
+import axios from 'axios';
+
 // Components: Import for Home page.
 import Navbar from '../../components/navbar'
 import Searchbox from '../../components/searchbox'
@@ -31,7 +33,7 @@ class Home extends Component {
         let newBook = {
             title: bookData.title,
             authors: bookData.authors,
-            image: bookData.imageLinks.thumbnail,
+            image: bookData.imageLinks.smallThumbnail,
             link: bookData.previewLink
         }
 
@@ -41,21 +43,8 @@ class Home extends Component {
 
     handleFormSubmit = event => {
         event.preventDefault();
-        if (this.state.title) {
-            API.searchBook({
-                title: this.state.title,
-            })
-                .then(res => {
-                  
-                    console.log(res)
-
-                    this.setState({
-                        results: res,
-                        hasSearched: true,
-                    })
-                })
-                .catch(err => console.log(err + "\n form submit not"));
-        }
+        let url = "https://www.googleapis.com/books/v1/volumes?q=" + this.state.title.toLowerCase();
+        axios.get(url).then(search => this.setState({results: search.data.items, hasSearched: true})).catch(err => console.log(err + "\n hey axios didnt work!"))
     };
 
     render() {
@@ -63,7 +52,11 @@ class Home extends Component {
             <React.Fragment>
                 <Navbar home={this.state.home} booklist={this.state.booklist} about={this.state.about} />
                 <Searchbox handleFormSubmit={this.handleFormSubmit} handleInputChange={this.handleInputChange} title={this.state.title} />
-                <SearchResults saveBook={this.saveBook} hasSearched={this.hasSearched} results={this.results} />
+                <div className="container">
+                    <div className="row">
+                    <SearchResults saveBook={this.state.saveBook} hasSearched={this.state.hasSearched} results={this.state.results} />
+                    </div>
+                </div>
             </React.Fragment>
         );
     }
