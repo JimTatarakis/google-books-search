@@ -26,13 +26,13 @@ class Home extends Component {
     };
 
     saveBook = bookData => {
-        event.preventDefault();
+        bookData.preventDefault();
 
         let newBook = {
             title: bookData.title,
             authors: bookData.authors,
             image: bookData.imageLinks.thumbnail,
-            link: previewLink
+            link: bookData.previewLink
         }
 
         API.saveBook(newBook);
@@ -46,16 +46,15 @@ class Home extends Component {
                 title: this.state.title,
             })
                 .then(res => {
+                  
                     console.log(res)
-                    console.log(res.data)
-                    console.log(res.data.items)
 
                     this.setState({
-                        results: res.data.items,
+                        results: res,
                         hasSearched: true,
                     })
                 })
-                .catch(err => console.log(err));
+                .catch(err => console.log(err + "\n form submit not"));
         }
     };
 
